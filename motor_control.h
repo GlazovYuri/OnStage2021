@@ -1,3 +1,5 @@
+int max_speed = 127;  //max_speed < 255   (else pwm_pin will be on fire)
+
 void set_motor_speeds (int speed, double angle, int turn_speed) {
 
   int  direction0 = 0;
@@ -11,13 +13,15 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
   }
 
   int  motor0_speed = speed * sin(angle - PI / 4 * 3) + turn_speed;
+  Serial.print("aueua ");
   if (motor0_speed < 0) {
     motor0_speed = -1 * motor0_speed;
     direction0 = 1;
   }
-  if (motor0_speed > 255) {
-    motor0_speed = 255;
+  if (motor0_speed > max_speed) {
+    motor0_speed = max_speed;
   }
+  Serial.println(motor0_speed);
 
 
   int  motor1_speed = speed * sin(angle - PI / 4) + turn_speed;
@@ -25,8 +29,8 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     motor1_speed = -1 * motor1_speed;
     direction1 = 1;
   }
-  if (motor1_speed > 255) {
-    motor1_speed = 255;
+  if (motor1_speed > max_speed) {
+    motor1_speed = max_speed;
   }
 
 
@@ -35,8 +39,8 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     motor2_speed = -1 * motor2_speed;
     direction2 = 1;
   }
-  if (motor2_speed > 255) {
-    motor2_speed = 255;
+  if (motor2_speed > max_speed) {
+    motor2_speed = max_speed;
   }
 
 
@@ -45,8 +49,8 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     motor3_speed = -1 * motor3_speed;
     direction3 = 1;
   }
-  if (motor3_speed > 255) {
-    motor3_speed = 255;
+  if (motor3_speed > max_speed) {
+    motor3_speed = max_speed;
   }
 
 
@@ -59,7 +63,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     digitalWrite(motor0_A_PIN, 1);
     digitalWrite(motor0_B_PIN, 0);
   }
-  digitalWrite(motor0_PWM_PIN, motor0_speed);
+  digitalWrite(motor0_PWM_PIN, 1);
 
 
   if (direction1 == 0) {
@@ -101,8 +105,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
 long motor0_enc = 0;
 long motor4_enc = 0;
 long motor5_enc = 0;
-void Enc0()
-{
+void Enc0() {
   if ( digitalRead(motor0_SIG_PIN) )
   {
     motor0_enc++;
@@ -110,8 +113,7 @@ void Enc0()
     motor0_enc--;
   }
 }
-void Enc4()
-{
+void Enc4() {
   if ( digitalRead(motor4_SIG_PIN) )
   {
     motor4_enc++;
@@ -119,8 +121,7 @@ void Enc4()
     motor4_enc--;
   }
 }
-void Enc5()
-{
+void Enc5() {
   if ( digitalRead(motor5_SIG_PIN) )
   {
     motor5_enc++;
@@ -130,15 +131,15 @@ void Enc5()
 }
 
 
-int k = 1;
+int k = 0.5;
 
 void set_motor_target(int v1, int pos1, int v2, int pos2) {
 
   long err1 = pos1 - motor4_enc;
   long err2 = pos2 - motor5_enc;
 
-  int motor4_speed = err1 * k;
-  int motor5_speed = err2 * k;
+  int motor4_speed = abs(err1 * k);
+  int motor5_speed = abs(err2 * k);
 
   if (motor4_speed > v1) {
     motor4_speed = v1;

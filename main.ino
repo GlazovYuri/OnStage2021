@@ -142,6 +142,12 @@ void setup() {
   pinMode(motor3_A_PIN,   OUTPUT);
   pinMode(motor3_B_PIN,   OUTPUT);
   pinMode(motor3_PWM_PIN, OUTPUT);
+  pinMode(motor4_A_PIN,   OUTPUT);
+  pinMode(motor4_B_PIN,   OUTPUT);
+  pinMode(motor4_PWM_PIN, OUTPUT);
+  pinMode(motor5_A_PIN,   OUTPUT);
+  pinMode(motor5_B_PIN,   OUTPUT);
+  pinMode(motor5_PWM_PIN, OUTPUT);
 
   pinMode(motor0_INT_PIN, INPUT);
   pinMode(motor0_SIG_PIN, INPUT);
@@ -165,7 +171,7 @@ constexpr long iteration_duration{15};
 long iterations_passed{0};
 
 void end_iteration() {
-  while(global_time<iteration_duration*(iterations_passed+1)) {};
+  while (global_time < iteration_duration * (iterations_passed + 1)) {};
   iterations_passed++;
 }
 
@@ -177,9 +183,8 @@ void loop() {
 
   buttonUpd();
   Serial.println(scene);
-  Serial.println(get_motor_encoder(0));
 
-  
+
 
   //set_motor_speeds(0, 0, 25);
 
@@ -197,7 +202,7 @@ void loop() {
 
 
     case (2):
-      set_motor_speeds(-25, 0, 0);                 //drive
+      set_motor_speeds(-25, -PI/6, 0);                 //drive
       if (get_motor_encoder(0) > 800)   {
         scene = 3;
         my_time = timer_ms(0);
@@ -218,7 +223,7 @@ void loop() {
 
 
     case (4):
-      //set_motor_target(sequence.get(my_time).v1, sequence.get(my_time).p1, sequence.get(my_time).v2, sequence.get(my_time).p2);
+      set_motor_target(sequence.get(my_time).v1, sequence.get(my_time).p1, sequence.get(my_time).v2, sequence.get(my_time).p2);
       if (my_time > 18300 + 18 * delta_time)   {
         scene = 5;
         gyro_zero = gyro_integrator;
@@ -240,7 +245,7 @@ void loop() {
 
     case (6):
       set_motor_speeds(25, 0, 0);                 //drive
-      if (get_motor_encoder(0) > 2000)   {
+      if (get_motor_encoder(0) < -800)   {
         scene = 7;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -250,8 +255,8 @@ void loop() {
 
     case (7):
       //set_motor_target(100 * delta_speed, 0, 100 * delta_speed, 0);
-      if (get_motor_encoder(0) < 5 and get_motor_encoder(0) > -5)
-        //p.end(); end
+      //if (get_motor_encoder(4) < 5 and get_motor_encoder(5) > -5)
+      //  p.end();
       set_motor_speeds(0, 0, 0);
       break;
 
