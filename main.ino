@@ -157,15 +157,13 @@ int scene = 1;           // !!! don't change if you work with customs libraries 
 
 void loop() {
   gyro_integrator.update(raw_gyro.readFloatGyroZ());
-  //Serial.println(raw_gyro);
 
   buttonUpd();
-  Serial.print("button3:  ");
-  Serial.println(button3);
+  Serial.println(gyro_integrator);
 
   //set_motor_speeds(0, 0, 25);
 
-  switch (scene) {
+  /*switch (scene) {
 
     case (1):
       if (button3)  {             //wait start
@@ -237,6 +235,6 @@ void loop() {
       p.set_motor_speeds(0, 0, 0);
       break;
 
-  }
-  end_iteration();
+  }*/
+//  end_iteration();
 }
