@@ -10,9 +10,19 @@
 #define motor3_A_PIN   35
 #define motor3_B_PIN   36
 #define motor3_PWM_PIN  7
+#define motor4_A_PIN   37
+#define motor4_B_PIN   38
+#define motor4_PWM_PIN  8
+#define motor5_A_PIN   39
+#define motor5_B_PIN   40
+#define motor5_PWM_PIN  9
 
 #define motor0_INT_PIN 19
 #define motor0_SIG_PIN 25
+#define motor4_INT_PIN  2
+#define motor4_SIG_PIN 26
+#define motor5_INT_PIN  3
+#define motor5_SIG_PIN 27
 
 #include "SparkFunLSM6DS3.h"
 #include "pins_arduino.h"
@@ -136,6 +146,12 @@ void setup() {
   pinMode(motor0_INT_PIN, INPUT);
   pinMode(motor0_SIG_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(motor0_INT_PIN), Enc0, RISING);
+  pinMode(motor4_INT_PIN, INPUT);
+  pinMode(motor4_SIG_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(motor4_INT_PIN), Enc4, RISING);
+  pinMode(motor5_INT_PIN, INPUT);
+  pinMode(motor5_SIG_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(motor5_INT_PIN), Enc5, RISING);
 
   Serial.begin(9600);
   raw_gyro.begin();
@@ -145,30 +161,34 @@ void setup() {
   my_time = timer_ms(0);
 }
 
-/*void end_iteration() {
-  while (global_time < preferred_iteration_time * (iterations_passed + 1)) {
-    delay(1);
-  }
-  iterations_passed++;
-  }*/
+constexpr long iteration_duration{15};
+long iterations_passed{0};
 
-LSM6DS3 gyro_zero = 0;
-int scene = 1;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
+void end_iteration() {
+  while(global_time<iteration_duration*(iterations_passed+1)) {};
+  iterations_passed++;
+}
+
+double gyro_zero = 0;
+int scene = 2;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
 
 void loop() {
   gyro_integrator.update(raw_gyro.readFloatGyroZ());
 
   buttonUpd();
-  Serial.println(gyro_integrator);
+  Serial.println(scene);
+  Serial.println(get_motor_encoder(0));
+
+  
 
   //set_motor_speeds(0, 0, 25);
 
-  /*switch (scene) {
+  switch (scene) {
 
     case (1):
       if (button3)  {             //wait start
         scene = 2;
-        gyro_zero = raw_gyro;
+        gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
         delay(200);                                          //for activate by start_button
@@ -178,7 +198,7 @@ void loop() {
 
     case (2):
       set_motor_speeds(-25, 0, 0);                 //drive
-      if (get_motor_encoder(0) < -800)   {
+      if (get_motor_encoder(0) > 800)   {
         scene = 3;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -188,7 +208,7 @@ void loop() {
 
     case (3):
       set_motor_speeds(0, 0, 15);                 //180 turn
-      if (raw_gyro > 179.2 + gyro_zero)   {
+      if (gyro_integrator > PI / 32 * 31 + gyro_zero)   {
         scene = 4;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -198,10 +218,10 @@ void loop() {
 
 
     case (4):
-      set_motor_target(sequence.get(my_time).v1, sequence.get(my_time).p1, sequence.get(my_time).v2, sequence.get(my_time).p2);
+      //set_motor_target(sequence.get(my_time).v1, sequence.get(my_time).p1, sequence.get(my_time).v2, sequence.get(my_time).p2);
       if (my_time > 18300 + 18 * delta_time)   {
         scene = 5;
-        gyro_zero = raw_gyro;
+        gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
       }
@@ -210,7 +230,7 @@ void loop() {
 
     case (5):
       set_motor_speeds(0, 0, -15);                 //180 turn
-      if (raw_gyro < -179.2  + gyro_zero)   {
+      if (gyro_integrator < -PI / 32 * 31  + gyro_zero)   {
         scene = 6;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -230,11 +250,11 @@ void loop() {
 
     case (7):
       //set_motor_target(100 * delta_speed, 0, 100 * delta_speed, 0);
-      if (p.get_motor_encoder_aa(5) < 5 and p.get_motor_encoder_aa(6) > -5)
+      if (get_motor_encoder(0) < 5 and get_motor_encoder(0) > -5)
         //p.end(); end
-      p.set_motor_speeds(0, 0, 0);
+      set_motor_speeds(0, 0, 0);
       break;
 
-  }*/
-//  end_iteration();
+    }
+  end_iteration();
 }

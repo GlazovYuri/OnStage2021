@@ -99,6 +99,8 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
 
 
 long motor0_enc = 0;
+long motor4_enc = 0;
+long motor5_enc = 0;
 void Enc0()
 {
   if ( digitalRead(motor0_SIG_PIN) )
@@ -108,6 +110,66 @@ void Enc0()
     motor0_enc--;
   }
 }
+void Enc4()
+{
+  if ( digitalRead(motor4_SIG_PIN) )
+  {
+    motor4_enc++;
+  } else {
+    motor4_enc--;
+  }
+}
+void Enc5()
+{
+  if ( digitalRead(motor5_SIG_PIN) )
+  {
+    motor5_enc++;
+  } else {
+    motor5_enc--;
+  }
+}
+
+
+int k = 1;
+
+void set_motor_target(int v1, int pos1, int v2, int pos2) {
+
+  long err1 = pos1 - motor4_enc;
+  long err2 = pos2 - motor5_enc;
+
+  int motor4_speed = err1 * k;
+  int motor5_speed = err2 * k;
+
+  if (motor4_speed > v1) {
+    motor4_speed = v1;
+  }
+  if (motor5_speed > v2) {
+    motor5_speed = v2;
+  }
+
+  if (err1 > 0) {
+    digitalWrite(motor4_A_PIN, 0);
+    digitalWrite(motor4_B_PIN, 1);
+  }
+  else {
+    digitalWrite(motor4_A_PIN, 1);
+    digitalWrite(motor4_B_PIN, 0);
+  }
+  digitalWrite(motor4_PWM_PIN, motor4_speed);
+
+  if (err2 > 0) {
+    digitalWrite(motor5_A_PIN, 0);
+    digitalWrite(motor5_B_PIN, 1);
+  }
+  else {
+    digitalWrite(motor5_A_PIN, 1);
+    digitalWrite(motor5_B_PIN, 0);
+  }
+  digitalWrite(motor5_PWM_PIN, motor5_speed);
+
+}
+
+
 
 long enc0_zero = 0;
 
@@ -115,7 +177,9 @@ int get_motor_encoder(int enc_number) {
   if (enc_number == 0) {
     return motor0_enc - enc0_zero;
   }
-  //need more encoders (4 && 5)
+  else {
+    return 0;
+  }
 }
 
 void set_motor_encoder_zero() {
