@@ -44,7 +44,7 @@ timer_ms my_time(0);
 LSM6DS3 raw_gyro(I2C_MODE, 0x6A);
 crude_integrator<micros> gyro_integrator(
   0.000001 * D2R,
-  1.8856
+  0.8856
 );
 
 /*motor_suite motors{{.value={
@@ -104,8 +104,8 @@ struct my_payload {
 #define delta_speed 0.7
 #define delta_time  200
 
-ni_point<my_payload> masive[masive_size] = {                  //1-rats   2-soldiers
-  //v1                 v2                 p1                p2                   time
+ni_point<my_payload> masive[masive_size] = {                  //2-rats   1-soldiers
+  //v1                   v2                   p1                 p2                  time
   {{100 * delta_speed,   100 * delta_speed,   540 + delta_pos,  -540 - delta_pos},   0},
   {{100 * delta_speed,   100 * delta_speed,   340 + delta_pos,  -350 - delta_pos},   2800 + delta_time},
   {{100 * delta_speed,   100 * delta_speed,   540 + delta_pos,  -540 - delta_pos},   3700 + 2 * delta_time},
@@ -176,13 +176,13 @@ void end_iteration() {
 }
 
 double gyro_zero = 0;
-int scene = 2;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
+int scene = 4;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
 
 void loop() {
   gyro_integrator.update(raw_gyro.readFloatGyroZ());
 
   buttonUpd();
-  Serial.println(scene);
+  Serial.println(gyro_integrator);
 
 
 
@@ -202,7 +202,7 @@ void loop() {
 
 
     case (2):
-      set_motor_speeds(-25, -PI/6, 0);                 //drive
+      set_motor_speeds(30, 0, 0);                 //drive
       if (get_motor_encoder(0) > 800)   {
         scene = 3;
         my_time = timer_ms(0);
@@ -225,7 +225,7 @@ void loop() {
     case (4):
       set_motor_target(sequence.get(my_time).v1, sequence.get(my_time).p1, sequence.get(my_time).v2, sequence.get(my_time).p2);
       if (my_time > 18300 + 18 * delta_time)   {
-        scene = 5;
+        scene = 7;
         gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -260,6 +260,6 @@ void loop() {
       set_motor_speeds(0, 0, 0);
       break;
 
-    }
+    }  
   end_iteration();
 }

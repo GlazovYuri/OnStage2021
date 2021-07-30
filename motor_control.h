@@ -12,8 +12,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     angle += PI;
   }
 
-  int  motor0_speed = speed * sin(angle - PI / 4 * 3) + turn_speed;
-  Serial.print("aueua ");
+  int  motor0_speed = speed * cos(angle - PI / 4 * 3) + turn_speed;
   if (motor0_speed < 0) {
     motor0_speed = -1 * motor0_speed;
     direction0 = 1;
@@ -21,10 +20,9 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
   if (motor0_speed > max_speed) {
     motor0_speed = max_speed;
   }
-  Serial.println(motor0_speed);
 
 
-  int  motor1_speed = speed * sin(angle - PI / 4) + turn_speed;
+  int  motor1_speed = speed * cos(angle - PI / 4) + turn_speed;
   if (motor1_speed < 0) {
     motor1_speed = -1 * motor1_speed;
     direction1 = 1;
@@ -34,7 +32,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
   }
 
 
-  int  motor2_speed = speed * sin(angle + PI / 4) + turn_speed;
+  int  motor2_speed = speed * cos(angle + PI / 4) + turn_speed;
   if (motor2_speed < 0) {
     motor2_speed = -1 * motor2_speed;
     direction2 = 1;
@@ -44,7 +42,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
   }
 
 
-  int  motor3_speed = speed * sin(angle + PI / 4 * 3) + turn_speed;
+  int  motor3_speed = speed * cos(angle + PI / 4 * 3) + turn_speed;
   if (motor3_speed < 0) {
     motor3_speed = -1 * motor3_speed;
     direction3 = 1;
@@ -63,7 +61,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     digitalWrite(motor0_A_PIN, 1);
     digitalWrite(motor0_B_PIN, 0);
   }
-  digitalWrite(motor0_PWM_PIN, 1);
+  analogWrite(motor0_PWM_PIN, motor0_speed);
 
 
   if (direction1 == 0) {
@@ -74,7 +72,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     digitalWrite(motor1_A_PIN, 1);
     digitalWrite(motor1_B_PIN, 0);
   }
-  digitalWrite(motor1_PWM_PIN, motor1_speed);
+  analogWrite(motor1_PWM_PIN, motor1_speed);
 
 
   if (direction2 == 0) {
@@ -85,7 +83,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     digitalWrite(motor2_A_PIN, 1);
     digitalWrite(motor2_B_PIN, 0);
   }
-  digitalWrite(motor2_PWM_PIN, motor2_speed);
+  analogWrite(motor2_PWM_PIN, motor2_speed);
 
 
   if (direction3 == 0) {
@@ -96,7 +94,7 @@ void set_motor_speeds (int speed, double angle, int turn_speed) {
     digitalWrite(motor3_A_PIN, 1);
     digitalWrite(motor3_B_PIN, 0);
   }
-  digitalWrite(motor3_PWM_PIN, motor3_speed);
+  analogWrite(motor3_PWM_PIN, motor3_speed);
 }
 
 
@@ -108,9 +106,9 @@ long motor5_enc = 0;
 void Enc0() {
   if ( digitalRead(motor0_SIG_PIN) )
   {
-    motor0_enc++;
-  } else {
     motor0_enc--;
+  } else {
+    motor0_enc++;
   }
 }
 void Enc4() {
@@ -131,15 +129,15 @@ void Enc5() {
 }
 
 
-int k = 0.5;
+float k = 0.5;
 
 void set_motor_target(int v1, int pos1, int v2, int pos2) {
 
-  long err1 = pos1 - motor4_enc;
-  long err2 = pos2 - motor5_enc;
+  long err1 = pos2 - motor4_enc;
+  long err2 = pos1 - motor5_enc;
 
-  int motor4_speed = abs(err1 * k);
-  int motor5_speed = abs(err2 * k);
+  int motor4_speed = abs(err2 * k);
+  int motor5_speed = abs(err1 * k);
 
   if (motor4_speed > v1) {
     motor4_speed = v1;
@@ -148,15 +146,17 @@ void set_motor_target(int v1, int pos1, int v2, int pos2) {
     motor5_speed = v2;
   }
 
+
   if (err1 > 0) {
-    digitalWrite(motor4_A_PIN, 0);
-    digitalWrite(motor4_B_PIN, 1);
-  }
-  else {
     digitalWrite(motor4_A_PIN, 1);
     digitalWrite(motor4_B_PIN, 0);
   }
-  digitalWrite(motor4_PWM_PIN, motor4_speed);
+  else {
+    digitalWrite(motor4_A_PIN, 0);
+    digitalWrite(motor4_B_PIN, 1);
+  }
+  analogWrite(motor4_PWM_PIN, motor4_speed);
+  Serial.println(motor4_speed);
 
   if (err2 > 0) {
     digitalWrite(motor5_A_PIN, 0);
@@ -166,7 +166,7 @@ void set_motor_target(int v1, int pos1, int v2, int pos2) {
     digitalWrite(motor5_A_PIN, 1);
     digitalWrite(motor5_B_PIN, 0);
   }
-  digitalWrite(motor5_PWM_PIN, motor5_speed);
+  analogWrite(motor5_PWM_PIN, motor5_speed);
 
 }
 
