@@ -100,30 +100,30 @@ struct my_payload {
 
 #define masive_size 18
 
-#define delta_pos   -100
+#define delta_pos   0
 #define delta_speed 0.7
 #define delta_time  200
 
 ni_point<my_payload> masive[masive_size] = {                  //2-rats   1-soldiers
   //v1                   v2                   p1                 p2                  time
-  {{100 * delta_speed,   100 * delta_speed,   540 + delta_pos,  -540 - delta_pos},   0},
-  {{100 * delta_speed,   100 * delta_speed,   340 + delta_pos,  -350 - delta_pos},   2800 + delta_time},
-  {{100 * delta_speed,   100 * delta_speed,   540 + delta_pos,  -540 - delta_pos},   3700 + 2 * delta_time},
-  {{100 * delta_speed,   100 * delta_speed,   340 + delta_pos,  -350 - delta_pos},   4600 + 3 * delta_time},
-  {{100 * delta_speed,   100 * delta_speed,   540 + delta_pos,  -540 - delta_pos},   5500 + 4 * delta_time},
-  {{100 * delta_speed,   100 * delta_speed,   780 + delta_pos,  -750 - delta_pos},   6600 + 5 * delta_time},
-  {{100 * delta_speed,   100 * delta_speed,   540 + delta_pos,  -540 - delta_pos},   7700 + 6 * delta_time},
-  {{100 * delta_speed,   100 * delta_speed,   780 + delta_pos,  -750 - delta_pos},   8800 + 7 * delta_time},
-  {{100 * delta_speed,   100 * delta_speed,   540 + delta_pos,  -540 - delta_pos},   9900 + 8 * delta_time},
-  {{120 * delta_speed,    60 * delta_speed,   850 + delta_pos,  -540 - delta_pos},   11000 + 9 * delta_time},
-  {{120 * delta_speed,    60 * delta_speed,   850 + delta_pos,  -470 - delta_pos},   11250 + 10 * delta_time},
-  {{100 * delta_speed,    60 * delta_speed,   540 + delta_pos,  -470 - delta_pos},   12300 + 11 * delta_time},
-  {{120 * delta_speed,    60 * delta_speed,   850 + delta_pos,  -470 - delta_pos},   13200 + 12 * delta_time},
-  {{120 * delta_speed,    60 * delta_speed,   850 + delta_pos,  -400 - delta_pos},   14050 + 13 * delta_time},
-  {{100 * delta_speed,    60 * delta_speed,   540 + delta_pos,  -400 - delta_pos},   14700 + 14 * delta_time},
-  {{120 * delta_speed,    60 * delta_speed,   850 + delta_pos,  -400 - delta_pos},   15800 + 15 * delta_time},
-  {{120 * delta_speed,    60 * delta_speed,   850 + delta_pos,  -200 - delta_pos},   16450 + 16 * delta_time},
-  {{100 * delta_speed,    60 * delta_speed,   630 + delta_pos,  -200 - delta_pos},   17150 + 17 * delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   80  + delta_pos,  80  + delta_pos},   0},
+  {{100 * delta_speed,   100 * delta_speed,   50  + delta_pos,  50  + delta_pos},   2800 + delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   80  + delta_pos,  80  + delta_pos},   3700 + 2 * delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   50  + delta_pos,  50  + delta_pos},   4600 + 3 * delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   80  + delta_pos,  80  + delta_pos},   5500 + 4 * delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   110 + delta_pos,  110 + delta_pos},   6600 + 5 * delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   80  + delta_pos,  80  + delta_pos},   7700 + 6 * delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   110 + delta_pos,  110 + delta_pos},   8800 + 7 * delta_time},
+  {{100 * delta_speed,   100 * delta_speed,   80  + delta_pos,  80  + delta_pos},   9900 + 8 * delta_time},
+  {{120 * delta_speed,    60 * delta_speed,   120 + delta_pos,  80  + delta_pos},   11000 + 9 * delta_time},
+  {{120 * delta_speed,    60 * delta_speed,   120 + delta_pos,  65  + delta_pos},   11250 + 10 * delta_time},
+  {{100 * delta_speed,    60 * delta_speed,   80  + delta_pos,  65  + delta_pos},   12300 + 11 * delta_time},
+  {{120 * delta_speed,    60 * delta_speed,   120 + delta_pos,  65  + delta_pos},   13200 + 12 * delta_time},
+  {{120 * delta_speed,    60 * delta_speed,   120 + delta_pos,  55  + delta_pos},   14050 + 13 * delta_time},
+  {{100 * delta_speed,    60 * delta_speed,   80  + delta_pos,  55  + delta_pos},   14700 + 14 * delta_time},
+  {{120 * delta_speed,    60 * delta_speed,   120 + delta_pos,  55  + delta_pos},   15800 + 15 * delta_time},
+  {{120 * delta_speed,    60 * delta_speed,   120 + delta_pos,  25  + delta_pos},   16450 + 16 * delta_time},
+  {{100 * delta_speed,    60 * delta_speed,   90  + delta_pos,  25  + delta_pos},   17150 + 17 * delta_time},
 };
 
 ni_sequence<my_payload> sequence(masive, masive_size);
@@ -182,7 +182,6 @@ void loop() {
   gyro_integrator.update(raw_gyro.readFloatGyroZ());
 
   buttonUpd();
-  Serial.println(gyro_integrator);
 
 
 
@@ -203,7 +202,7 @@ void loop() {
 
     case (2):
       set_motor_speeds(30, 0, 0);                 //drive
-      if (get_motor_encoder(0) > 800)   {
+      if (get_motor_encoder() > 800)   {
         scene = 3;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -245,21 +244,22 @@ void loop() {
 
     case (6):
       set_motor_speeds(25, 0, 0);                 //drive
-      if (get_motor_encoder(0) < -800)   {
+      if (get_motor_encoder() < -800)   {
         scene = 7;
         my_time = timer_ms(0);
+        Serial.println("end");
         set_motor_encoder_zero();
       }
       break;
 
 
     case (7):
-      //set_motor_target(100 * delta_speed, 0, 100 * delta_speed, 0);
-      //if (get_motor_encoder(4) < 5 and get_motor_encoder(5) > -5)
-      //  p.end();
+      set_motor_target(100 * delta_speed, 0, 100 * delta_speed, 0);
+      if (motor4_enc < 5 and motor5_enc > -5)
+          stop_up_motors();
       set_motor_speeds(0, 0, 0);
       break;
 
-    }  
+  }
   end_iteration();
 }

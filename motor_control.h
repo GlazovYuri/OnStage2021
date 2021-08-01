@@ -114,9 +114,9 @@ void Enc0() {
 void Enc4() {
   if ( digitalRead(motor4_SIG_PIN) )
   {
-    motor4_enc++;
-  } else {
     motor4_enc--;
+  } else {
+    motor4_enc++;
   }
 }
 void Enc5() {
@@ -129,36 +129,41 @@ void Enc5() {
 }
 
 
-float k = 0.5;
+float k = 1.125;
 
-void set_motor_target(int v1, int pos1, int v2, int pos2) {
+void set_motor_target(int v5, int pos5, int v4, int pos4) {
 
-  long err1 = pos2 - motor4_enc;
-  long err2 = pos1 - motor5_enc;
+  long err4 = motor4_enc - pos4;
+  long err5 = motor5_enc - pos5;
 
-  int motor4_speed = abs(err2 * k);
-  int motor5_speed = abs(err1 * k);
+  long motor4_speed = abs(err4 * k);
+  long motor5_speed = abs(err5 * k);
 
-  if (motor4_speed > v1) {
-    motor4_speed = v1;
+  if (motor4_speed > v4) {
+    motor4_speed = v4;
   }
-  if (motor5_speed > v2) {
-    motor5_speed = v2;
+  if (motor5_speed > v5) {
+    motor5_speed = v5;
   }
 
+  Serial.print("enc4  ");
+  Serial.print(motor4_enc);
+  Serial.print("  err4  ");
+  Serial.print(err4);
+  Serial.print("  speed4  ");
+  Serial.println(motor4_speed);
 
-  if (err1 > 0) {
-    digitalWrite(motor4_A_PIN, 1);
-    digitalWrite(motor4_B_PIN, 0);
-  }
-  else {
+  if (err4 < 0) {
     digitalWrite(motor4_A_PIN, 0);
     digitalWrite(motor4_B_PIN, 1);
   }
+  else {
+    digitalWrite(motor4_A_PIN, 1);
+    digitalWrite(motor4_B_PIN, 0);
+  }
   analogWrite(motor4_PWM_PIN, motor4_speed);
-  Serial.println(motor4_speed);
 
-  if (err2 > 0) {
+  if (err5 < 0) {
     digitalWrite(motor5_A_PIN, 0);
     digitalWrite(motor5_B_PIN, 1);
   }
@@ -174,16 +179,20 @@ void set_motor_target(int v1, int pos1, int v2, int pos2) {
 
 long enc0_zero = 0;
 
-int get_motor_encoder(int enc_number) {
-  if (enc_number == 0) {
-    return motor0_enc - enc0_zero;
-  }
-  else {
-    return 0;
-  }
+int get_motor_encoder() {
+  return motor0_enc - enc0_zero;
 }
 
 void set_motor_encoder_zero() {
   enc0_zero = 0;
-  enc0_zero = get_motor_encoder(0);
+  enc0_zero = get_motor_encoder();
+}
+
+void stop_up_motors() {
+  digitalWrite(motor4_A_PIN, 0);
+  digitalWrite(motor4_B_PIN, 0);
+  digitalWrite(motor5_A_PIN, 0);
+  digitalWrite(motor5_B_PIN, 0);
+  analogWrite(motor4_PWM_PIN, 0);
+  analogWrite(motor5_PWM_PIN, 0);
 }
