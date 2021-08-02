@@ -129,15 +129,15 @@ void Enc5() {
 }
 
 
-float k = 1.125;
+float k1 = 1.5;
 
 void set_motor_target(int v5, int pos5, int v4, int pos4) {
 
   long err4 = motor4_enc - pos4;
   long err5 = motor5_enc - pos5;
 
-  long motor4_speed = abs(err4 * k);
-  long motor5_speed = abs(err5 * k);
+  long motor4_speed = abs(err4 * k1);
+  long motor5_speed = abs(err5 * k1);
 
   if (motor4_speed > v4) {
     motor4_speed = v4;

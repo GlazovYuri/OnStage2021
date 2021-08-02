@@ -101,8 +101,8 @@ struct my_payload {
 #define masive_size 18
 
 #define delta_pos   0
-#define delta_speed 0.7
-#define delta_time  200
+#define delta_speed 0.5
+#define delta_time  100
 
 ni_point<my_payload> masive[masive_size] = {                  //2-rats   1-soldiers
   //v1                   v2                   p1                 p2                  time
@@ -176,7 +176,7 @@ void end_iteration() {
 }
 
 double gyro_zero = 0;
-int scene = 4;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
+int scene = 2;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
 
 void loop() {
   gyro_integrator.update(raw_gyro.readFloatGyroZ());
@@ -201,8 +201,8 @@ void loop() {
 
 
     case (2):
-      set_motor_speeds(30, 0, 0);                 //drive
-      if (get_motor_encoder() > 800)   {
+      set_motor_speeds(55, 0, 0);                 //drive
+      if (get_motor_encoder() > 250)   {
         scene = 3;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -211,8 +211,8 @@ void loop() {
 
 
     case (3):
-      set_motor_speeds(0, 0, 15);                 //180 turn
-      if (gyro_integrator > PI / 32 * 31 + gyro_zero)   {
+      set_motor_speeds(0, 0, 33);                 //180 turn
+      if (gyro_integrator > PI / 32 * 30 + gyro_zero)   {
         scene = 4;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
