@@ -165,6 +165,12 @@ void setup() {
 
   global_time = timer_ms(0);
   my_time = timer_ms(0);
+
+
+  Wire.begin();
+  Wire.beginTransmission(8);
+  Wire.write(2);
+  Wire.endTransmission();
 }
 
 constexpr long iteration_duration{15};
@@ -183,6 +189,8 @@ void loop() {
 
   buttonUpd();
 
+  Serial.println(gyro_integrator);
+  Serial.println(my_time);
 
 
   //set_motor_speeds(0, 0, 25);
@@ -190,11 +198,14 @@ void loop() {
   switch (scene) {
 
     case (1):
-      if (button3)  {             //wait start
+      if (my_time > 2250)  {             //wait start
         scene = 2;
         gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
+        Wire.beginTransmission(8);
+        Wire.write(2);
+        Wire.endTransmission();
         delay(200);                                          //for activate by start_button
       }
       break;
@@ -206,6 +217,9 @@ void loop() {
         scene = 3;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
+        Wire.beginTransmission(8);
+        Wire.write(3);
+        Wire.endTransmission();
       }
       break;
 
@@ -217,6 +231,9 @@ void loop() {
         my_time = timer_ms(0);
         set_motor_encoder_zero();
         set_motor_speeds(0, 0, 0);
+        Wire.beginTransmission(8);
+        Wire.write(4);
+        Wire.endTransmission();
       }
       break;
 
@@ -228,6 +245,9 @@ void loop() {
         gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
+        Wire.beginTransmission(8);
+        Wire.write(5);
+        Wire.endTransmission();
       }
       break;
 
@@ -238,6 +258,9 @@ void loop() {
         scene = 6;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
+        Wire.beginTransmission(8);
+        Wire.write(6);
+        Wire.endTransmission();
       }
       break;
 
@@ -249,6 +272,9 @@ void loop() {
         my_time = timer_ms(0);
         Serial.println("end");
         set_motor_encoder_zero();
+        Wire.beginTransmission(8);
+        Wire.write(7);
+        Wire.endTransmission();
       }
       break;
 
@@ -256,7 +282,7 @@ void loop() {
     case (7):
       set_motor_target(100 * delta_speed, 0, 100 * delta_speed, 0);
       if (motor4_enc < 5 and motor5_enc > -5)
-          stop_up_motors();
+        stop_up_motors();
       set_motor_speeds(0, 0, 0);
       break;
 
