@@ -176,12 +176,14 @@ void end_iteration() {
 }
 
 double gyro_zero = 0;
-int scene = 2;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
+int scene = 2;           // !!! don't change if you work without customs libraries for decoration  (without waiting button)
 
 void loop() {
   gyro_integrator.update(raw_gyro.readFloatGyroZ());
 
   buttonUpd();
+
+  Serial.println(gyro_integrator);
 
 
 
@@ -202,7 +204,7 @@ void loop() {
 
     case (2):
       set_motor_speeds(55, 0, 0);                 //drive
-      if (get_motor_encoder() > 250)   {
+      if (timer_ms(my_time) > 2250)   {
         scene = 3;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -256,7 +258,7 @@ void loop() {
     case (7):
       set_motor_target(100 * delta_speed, 0, 100 * delta_speed, 0);
       if (motor4_enc < 5 and motor5_enc > -5)
-          stop_up_motors();
+        stop_up_motors();
       set_motor_speeds(0, 0, 0);
       break;
 
