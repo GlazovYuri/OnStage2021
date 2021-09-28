@@ -169,7 +169,7 @@ void setup() {
 
   Wire.begin();
   Wire.beginTransmission(8);
-  Wire.write(2);
+  Wire.write(1);
   Wire.endTransmission();
 }
 
@@ -189,8 +189,7 @@ void loop() {
 
   buttonUpd();
 
-  Serial.println(gyro_integrator);
-  Serial.println(my_time);
+  Serial.println(motor0_enc);
 
 
   //set_motor_speeds(0, 0, 25);
@@ -198,7 +197,7 @@ void loop() {
   switch (scene) {
 
     case (1):
-      if (my_time > 2250)  {             //wait start
+      if (button3)  {             //wait start
         scene = 2;
         gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
@@ -213,7 +212,7 @@ void loop() {
 
     case (2):
       set_motor_speeds(55, 0, 0);                 //drive
-      if (get_motor_encoder() > 250)   {
+      if (my_time > 2250)   {
         scene = 3;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
