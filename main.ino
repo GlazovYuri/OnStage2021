@@ -212,7 +212,7 @@ void loop() {
 
     case (2):
       set_motor_speeds(55, 0, 0);                 //drive
-      if (my_time > 2250)   {
+      if (abs(motor0_enc) > 500)   {
         scene = 3;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
