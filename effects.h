@@ -1,12 +1,4 @@
-#define PIN1    8
-#define PIN2    9
-
-#define NUMPIXELS 144
-
-Adafruit_NeoPixel pixels1(NUMPIXELS, PIN1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixels2(NUMPIXELS, PIN2, NEO_GRB + NEO_KHZ800);
-
-pixels1.begin();
+pixels.begin();
 pixels2.begin();
 
 int color_mass1[NUMPIXELS][3];
@@ -44,7 +36,6 @@ void dynamic_gradient1(float speed, int r1, int g1, int b1, int r2, int g2, int 
     color_mass1[i][2] = b1 + (b2 - b1) / (NUMPIXELS / 2) * ((NUMPIXELS / 2) - abs(abs(pos1 - i) - (NUMPIXELS / 2)));
 
   }
-  pixels.show();
 }
 
 float pos2;
@@ -60,7 +51,6 @@ void dynamic_gradient2(float speed, int r1, int g1, int b1, int r2, int g2, int 
     color_mass2[i][2] = b1 + (b2 - b1) / (NUMPIXELS / 2) * ((NUMPIXELS / 2) - abs(abs(pos1 - i) - (NUMPIXELS / 2)));
 
   }
-  pixels.show();
 }
 
 
@@ -96,7 +86,7 @@ int size = rand() % 23 * 2 + 2;
   pixels.show();
   //Serial.println(delta);
 
-}*/
+  }*/
 
 /*
   int change_flag;

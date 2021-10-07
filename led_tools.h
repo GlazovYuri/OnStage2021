@@ -1,18 +1,12 @@
-#define NUMPIXELS 144
-
-
-void to_cmass(int num, int mass[NUMPIXELS][3]) {
+void update_led(int num, int mass[NUMPIXELS][3]) {
   if (num == 1) {
     for (int i = 0; i < NUMPIXELS; i++) {
-      for (int j = 0; j < 3; j++) {
-        cmass1[i][j] = mass[i][j];
-      }
+      pixels1.setPixelColor(i, pixels1.Color(color_mass1[i][0], color_mass1[i][1], color_mass1[i][2]));
     }
   } else {
     for (int i = 0; i < NUMPIXELS; i++) {
-      for (int j = 0; j < 3; j++) {
-        cmass2[i][j] = mass[i][j];
-      }
+      pixels2.setPixelColor(i, pixels2.Color(color_mass2[i][0], color_mass2[i][1], color_mass2[i][2]));
     }
   }
+  pixels.show();
 }

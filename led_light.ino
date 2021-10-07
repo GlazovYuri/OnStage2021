@@ -4,13 +4,15 @@
 #include <avr/power.h>
 #endif
 
-
-/*int cmass1[144][3];
-int cmass2[144][3];*/
-
-//#include "effects.h"
+#include "effects.h"
 #include "led_tools.h"
+
+#define PIN1    8
+#define PIN2    9
 #define NUMPIXELS 144
+
+Adafruit_NeoPixel pixels(NUMPIXELS, PIN1, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel pixels2(NUMPIXELS, PIN2, NEO_GRB + NEO_KHZ800);
 
 
 #define DELAYVAL 50 // Time (in milliseconds) to pause between pixels
