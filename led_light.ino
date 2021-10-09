@@ -7,18 +7,17 @@
 #include "effects.h"
 #include "led_tools.h"
 
-#define PIN1    8
-#define PIN2    9
+#define PIN1    9
+#define PIN2    8
 #define NUMPIXELS 144
 
-Adafruit_NeoPixel pixels(NUMPIXELS, PIN1, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel pixels2(NUMPIXELS, PIN2, NEO_GRB + NEO_KHZ800);
-
+//Adafruit_NeoPixel pixels1(NUMPIXELS, PIN1, NEO_GRB + NEO_KHZ800);
+//Adafruit_NeoPixel pixels2(NUMPIXELS, PIN2, NEO_GRB + NEO_KHZ800);
 
 #define DELAYVAL 50 // Time (in milliseconds) to pause between pixels
 
 
-int color_mass1[NUMPIXELS][3];
+/*int color_mass1[NUMPIXELS][3];
 void static_gradient(int r1, int g1, int b1, int r2, int g2, int b2) {
   for (int i = 0; i < NUMPIXELS; i++) {
 
@@ -26,7 +25,7 @@ void static_gradient(int r1, int g1, int b1, int r2, int g2, int b2) {
     color_mass1[i][1] = g1 + (g2 - g1) * i / NUMPIXELS;
     color_mass1[i][2] = b1 + (b2 - b1) * i / NUMPIXELS;
   }
-}
+}*/
 
 
 int scene = 1;
@@ -49,14 +48,16 @@ void setup() {
   clock_prescale_set(clock_div_1);
 #endif
   // END of Trinket-specific code.
+  pixels1.begin();
+  pixels2.begin();
 
   Serial.begin(9600);
 }
 
 void loop() {
   int t1 = millis();
-  static_gradient(25, 0, 0, 0, 0, 128);
-  Serial.println(color_mass1[143][0]);
+  static_gradient1(25, 0, 0, 0, 0, 128);
+  update_led(1, color_mass1);
   //pixels.clear(); // Set all pixel colors to 'off'
   //dynamic_gradient (0.8, 25, 0, 0, 0, 0, 128);
   /*pixels.setPixelColor(59, 255, 255, 255);

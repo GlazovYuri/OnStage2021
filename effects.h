@@ -1,5 +1,4 @@
-pixels.begin();
-pixels2.begin();
+#define NUMPIXELS 144
 
 int color_mass1[NUMPIXELS][3];
 int color_mass2[NUMPIXELS][3];
