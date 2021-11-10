@@ -201,11 +201,11 @@ void loop() {
         scene = 2;
         gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
-        set_motor_encoder_zero();
-        Wire.beginTransmission(8);
+        set_motor_encoder_zero();                                          //for activate by start_button
+        /*Wire.beginTransmission(8);
         Wire.write(2);
         Wire.endTransmission();
-        delay(200);                                          //for activate by start_button
+        delay(200);*/
       }
       break;
 
@@ -230,9 +230,9 @@ void loop() {
         my_time = timer_ms(0);
         set_motor_encoder_zero();
         set_motor_speeds(0, 0, 0);
-        Wire.beginTransmission(8);
+        /*Wire.beginTransmission(8);
         Wire.write(4);
-        Wire.endTransmission();
+        Wire.endTransmission();*/
       }
       break;
 
@@ -240,7 +240,7 @@ void loop() {
     case (4):
       set_motor_target(sequence.get(my_time).v1, sequence.get(my_time).p1, sequence.get(my_time).v2, sequence.get(my_time).p2);
       if (my_time > 18300 + 18 * delta_time)   {
-        scene = 7;
+        scene = 5;
         gyro_zero = gyro_integrator;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
@@ -252,20 +252,20 @@ void loop() {
 
 
     case (5):
-      set_motor_speeds(0, 0, -15);                 //180 turn
+      set_motor_speeds(0, 0, -33);                 //180 turn
       if (gyro_integrator < -PI / 32 * 31  + gyro_zero)   {
         scene = 6;
         my_time = timer_ms(0);
         set_motor_encoder_zero();
-        Wire.beginTransmission(8);
+        /*Wire.beginTransmission(8);
         Wire.write(6);
-        Wire.endTransmission();
+        Wire.endTransmission();*/
       }
       break;
 
 
     case (6):
-      set_motor_speeds(25, 0, 0);                 //drive
+      set_motor_speeds(-55, 0, 0);                 //drive
       if (get_motor_encoder() < -800)   {
         scene = 7;
         my_time = timer_ms(0);
