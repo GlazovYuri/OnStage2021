@@ -173,6 +173,9 @@ void setup() {
   Wire.endTransmission();
 }
 
+
+
+
 constexpr long iteration_duration{15};
 long iterations_passed{0};
 
@@ -180,6 +183,8 @@ void end_iteration() {
   while (global_time < iteration_duration * (iterations_passed + 1)) {};
   iterations_passed++;
 }
+#include "zbee-handling.h"
+
 
 double gyro_zero = 0;
 int scene = 2;           // !!! don't change if you work with customs libraries for decoration  (without waiting button)
@@ -190,6 +195,8 @@ void loop() {
   buttonUpd();
 
   Serial.println(motor0_enc);
+
+
 
 
   //set_motor_speeds(0, 0, 25);
