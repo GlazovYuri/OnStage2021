@@ -65,12 +65,8 @@ void loop() {
         }
         break;
     }*/
-  Serial.println("point0");
-  dynamic_gradient1(0.8,  0, 255, 0, 255, 0, 0);
-  dynamic_gradient2(0.8,  25, 0, 255, 255, 0, 25);
+  static_gradient1(128,  0, 128, 128, 0, 128);
+  //dynamic_gradient2(0.8,  25, 0, 255, 255, 0, 25);
   pixels1.show();
-  pixels2.show();
-
-  //Serial.println();
-
+  //pixels2.show();
 }

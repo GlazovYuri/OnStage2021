@@ -99,8 +99,7 @@ void dynamic_gradient2(float speed, int r1, int g1, int b1, int r2, int g2, int 
     float  r_2 = r1 + (r2 - r1) * k2;
     float  g_2 = g1 + (g2 - g1) * k2;
     float  b_2 = b1 + (b2 - b1) * k2;
-    pixels2.setPixelColor(i, pixels2.Color(round(r1 + (r2 - r1) / (NUMPIXELS / 2) * ((NUMPIXELS / 2) - abs(abs(pos2 - i) - (NUMPIXELS / 2)))), round(g1 + (g2 - g1) / (NUMPIXELS / 2) * ((NUMPIXELS / 2) - abs(abs(pos2 - i) - (NUMPIXELS / 2)))), round(b1 + (b2 - b1) / (NUMPIXELS / 2) * ((NUMPIXELS / 2) - abs(abs(pos2 - i) - (NUMPIXELS / 2))))));
-
+    pixels2.setPixelColor(i, pixels2.Color(round(r_2), round(g_2), round(b_2)));
   }
 }
 
@@ -146,15 +145,11 @@ void change_dynamic_gradient1(int interr, float speed, int r11, int g11, int b11
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-/*int static_gradient(int r1, int g1, int b1, int r2, int g2, int b2) {
-  int color_mass[NUMPIXELS - 1][3];
+int static_gradient1(int r1, int g1, int b1, int r2, int g2, int b2) {
   for (int i = 0; i < NUMPIXELS; i++) {
-
-    color_mass[i][0] = r1 + (r2 - r1) / NUMPIXELS * i;
-    color_mass[i][1] = g1 + (g2 - g1) / NUMPIXELS * i;
-    color_mass[i][2] = b1 + (b2 - b1) / NUMPIXELS * i;
-
-    return color_mass;
-    //delay(DELAYVAL);
+    float  r_1 = r1 + (r2 - r1) * i / NUMPIXELS;
+    float  g_1 = g1 + (g2 - g1) * i / NUMPIXELS;
+    float  b_1 = b1 + (b2 - b1) * i / NUMPIXELS;
+    pixels1.setPixelColor(i, pixels1.Color(round(r_1), round(g_1), round(b_1)));
   }
-  }*/
+}
